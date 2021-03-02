@@ -1,20 +1,27 @@
-# /bin/bash -xe
+#!/bin/bash -e
 
-groupadd -g ${HOST_UID} tux
+user=$(grep ":${HOST_UID}" < /etc/group | cut -d":" -f1)
 
-useradd -m  -u ${HOST_UID} -g ${HOST_GID} -s /bin/bash tux
+if [ ! "$user" ]; then
+  user="tux"
+
+  groupadd -g "${HOST_UID}" $user
+
+  useradd -m  -u "${HOST_UID}" -g "${HOST_GID}" -s /bin/bash $user
+
+fi
 
 apt install -y sudo
-
-usermod -aG sudo tux
+# ensures that the user can logging in with bash shell
+usermod -aG sudo -s /bin/bash $user
 
 # set default passwd to tux user
-tuxpasswd="azertyuiop"
-echo "tux:${tuxpasswd}" | chpasswd
+passwd="azertyuiop"
+echo "${user}:${passwd}" | chpasswd
 
 echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-cat >> /home/tux/.bashrc <<EOT
+cat >> "$(grep $user < /etc/passwd | cut -d ":" -f6)"/.bashrc <<EOT
 alias ls='ls --color=auto';
 alias ll='ls --color=auto -alF';
 alias la='ls --color=auto -A';
