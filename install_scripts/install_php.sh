@@ -79,9 +79,9 @@ fi
 php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
 RESULT=$?
 
-if[ "$RESULT"  != 0]; then
+if [ "$RESULT" != 0 ]; then
   echo >&2 'Erro when installing composer'
   exit $RESULT
-}
+fi
 
 rm composer-setup.php
