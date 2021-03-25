@@ -39,6 +39,24 @@ apt install -y php-pear git libgeoip-dev
 pecl install geoip-beta
 bash -c "echo extension=geoip.so > /etc/php/${PHP_VERSION}/fpm/conf.d/geoip.ini"
 
+apt install -y git
+
+pecl install xdebug
+
+IFS=,
+zones=fpm,cli,cgi,apache2
+
+for zone in $zones ; do
+    cat >> /etc/php/${PHP_VERSION}/${zone}/conf.d/20-xdebug.ini <<EOT
+    zend_extension=xdebug.so;
+    xdebug.remote_enable=1;
+    xdebug.remote_mode=req;
+    xdebug.remote_port=9000;
+    xdebug.remote_host=127.0.0.1;
+    xdebug.remote_connect_back=0;
+EOT
+
+done
 
 if [ "${WITH_SYMFONY}" != 0 ]; then
   wget https://get.symfony.com/cli/installer -O - | bash
