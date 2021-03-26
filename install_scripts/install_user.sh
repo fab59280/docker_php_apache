@@ -5,7 +5,7 @@ user=$(grep ":${HOST_UID}" < /etc/group | cut -d":" -f1)
 if [ ! "$user" ]; then
   user="tux"
 
-  groupadd -g "${HOST_UID}" $user
+  groupadd -g "${HOST_GID}" $user
 
   useradd -m  -u "${HOST_UID}" -g "${HOST_GID}" -s /bin/bash $user
 
