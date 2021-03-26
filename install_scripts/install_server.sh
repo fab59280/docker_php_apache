@@ -4,7 +4,7 @@
 apt update && apt upgrade -y
 
 # Installation du serveur
-apt install -y apache2
+apt install -y apache2 lynx
 
 a2enmod proxy_fcgi setenvif rewrite mime expires env proxy proxy_balancer proxy_http setenvif headers
 
