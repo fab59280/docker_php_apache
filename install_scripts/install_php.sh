@@ -27,18 +27,14 @@ apt install -y \
   php"${PHP_VERSION}"-mysql \
   php"${PHP_VERSION}"-pdo \
   php"${PHP_VERSION}"-pgsql \
+  php"${PHP_VERSION}"-redis \
   php"${PHP_VERSION}"-soap \
   php"${PHP_VERSION}"-xml \
   php"${PHP_VERSION}"-xmlrpc \
   php"${PHP_VERSION}"-xsl \
   php"${PHP_VERSION}"-zip
 
-apt install -y php-pear git libgeoip-dev
-
-## Installing geoip pecl tool
-pecl install geoip-beta
-bash -c "echo extension=geoip.so > /etc/php/${PHP_VERSION}/fpm/conf.d/geoip.ini"
-
+apt install -y git
 
 if [ "${WITH_SYMFONY}" != 0 ]; then
   wget https://get.symfony.com/cli/installer -O - | bash
@@ -61,9 +57,9 @@ fi
 php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
 RESULT=$?
 
-if[ "$RESULT"  != 0]; then
+if [ "$RESULT"  != 0 ]; then
   echo >&2 'Erro when installing composer'
   exit $RESULT
-}
+fi
 
 rm composer-setup.php
