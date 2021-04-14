@@ -34,29 +34,17 @@ apt install -y \
   php"${PHP_VERSION}"-xsl \
   php"${PHP_VERSION}"-zip
 
-apt install -y php-pear git libgeoip-dev
-
-## Installing geoip pecl tool
-pecl install geoip-beta
-bash -c "echo extension=geoip.so > /etc/php/${PHP_VERSION}/fpm/conf.d/geoip.ini"
-
-apt install -y git
+apt install -y php-pear git
 
 pecl install xdebug
+
+touch /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
 
 IFS=,
 zones=fpm,cli,cgi,apache2
 
 for zone in $zones ; do
-    cat >> /etc/php/${PHP_VERSION}/${zone}/conf.d/20-xdebug.ini <<EOT
-    zend_extension=xdebug.so;
-    xdebug.remote_enable=1;
-    xdebug.remote_mode=req;
-    xdebug.remote_port=9000;
-    xdebug.remote_host=127.0.0.1;
-    xdebug.remote_connect_back=0;
-EOT
-
+  ln -s /etc/php/${PHP_VERSION}/mods-available/xdebug.ini /etc/php/${PHP_VERSION}/${zone}/conf.d/20-xdebug.ini
 done
 
 if [ "${WITH_SYMFONY}" != 0 ]; then
