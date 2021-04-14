@@ -25,6 +25,7 @@ apt install -y \
   php"${PHP_VERSION}"-intl \
   php"${PHP_VERSION}"-mbstring \
   php"${PHP_VERSION}"-mysql \
+  php"${PHP_VERSION}"-mcrypt \
   php"${PHP_VERSION}"-pdo \
   php"${PHP_VERSION}"-pgsql \
   php"${PHP_VERSION}"-soap \
